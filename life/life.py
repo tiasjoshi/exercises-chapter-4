@@ -80,3 +80,41 @@ class Game: # noqa F401
         pyplot.clf()
         pyplot.matshow(self.board, fignum=0, cmap='binary')
         pyplot.show()
+
+    def insert(self, pattern, position):
+        """Insert a pattern centred at the given position."""
+        i, j = position
+
+        p_grid = pattern.grid
+        p_rows, p_cols = p_grid.shape
+
+        # Find centre of pattern
+        centre_row = p_rows // 2
+        centre_col = p_cols // 2
+
+        # Top-left corner on game grid
+        start_row = i - centre_row
+        start_col = j - centre_col
+
+        # Insert pattern
+        for r in range(p_rows):
+            for c in range(p_cols):
+                self.board[start_row + r, start_col + c] = p_grid[r, c]
+
+
+class Pattern: # noqa F401
+
+    def __init__(self, grid): # noqa F401
+        self.grid = np.array(grid)
+
+    def flip_vertical(self): # noqa F401
+        return Pattern(self.grid[::-1, :])
+
+    def flip_horizontal(self): # noqa F401
+        return Pattern(self.grid[:, ::-1])
+
+    def flip_diag(self): # noqa F401
+        return Pattern(self.grid.T)
+
+    def rotate(self, n): # noqa F401
+        return Pattern(np.rot90(self.grid, n))
